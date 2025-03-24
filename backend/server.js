@@ -37,6 +37,11 @@ app.use('/api/dashboard', dashboardRoutes);
 
 app.use('/api/reports', reportRoutes);
 
+app.get("/", (req, res) => {
+    res.send("🚀 Billing App Backend API is running!");
+  });
+  
+
 
 app.listen(5000, () => {
     console.log("✅ Server running on port 5000");
