@@ -26,7 +26,7 @@ const Report = () => {
 
   const fetchReportData = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/reports/summary');
+      const res = await axios.get('http://billing-app-1.onrender.com/api/reports/summary');
       setReportData(res.data);
     } catch (err) {
       console.error("Failed to fetch report:", err);

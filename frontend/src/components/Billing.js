@@ -15,7 +15,7 @@ const Billing = () => {
 
     const handleGenerateBill = async () => {
         try {
-            const response = await fetch("http://localhost:5000/api/bills/generate", {
+            const response = await fetch("http://billing-app-1.onrender.com/api/bills/generate", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ customerName, items }),
