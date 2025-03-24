@@ -6,7 +6,9 @@ import productRoutes from './routes/productRoutes.js'; // ✅
 import billRoutes from './routes/billRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
-require('dotenv').config();
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 
 
