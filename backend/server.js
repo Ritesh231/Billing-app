@@ -6,6 +6,8 @@ import productRoutes from './routes/productRoutes.js'; // ✅
 import billRoutes from './routes/billRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
+require('dotenv').config();
+
 
 
 const app = express();
@@ -18,7 +20,7 @@ app.use((req, res, next) => {
 
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/billing-app', {
+mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
