@@ -17,13 +17,31 @@ const ProductManager = () => {
   const [editingId, setEditingId] = useState(null);
 
   const loadProducts = async () => {
-    const res = await fetchProducts();
-    setProducts(res.data);
-  };
+    console.log("📡 Fetching products...");
+    try {
+        const res = await fetchProducts();
+        console.log("✅ API Response:", res.data); // Debug API response
+        
+        if (!Array.isArray(res.data)) {
+            console.error("❌ Unexpected API response format:", res.data);
+            return;
+        }
 
+        setProducts(res.data);
+        console.log("🟢 Products state updated:", res.data);
+    } catch (error) {
+        console.error("❌ Error fetching products:", error);
+        alert("Failed to load products.");
+    }
+};
+
+  
+  
   useEffect(() => {
+    console.log("🟢 useEffect triggered, calling loadProducts...");
     loadProducts();
   }, []);
+  
 
   const handleAddOrUpdateProduct = async () => {
     const productData = {
@@ -33,29 +51,46 @@ const ProductManager = () => {
       stock: Number(newProduct.stock),
       sku: newProduct.sku?.trim(),
     };
-
+  
     if (!productData.name || isNaN(productData.price) || isNaN(productData.stock)) {
       alert("Please fill out all fields with valid data.");
       return;
     }
-
-    if (isEditing) {
-      console.log("🔧 Editing product ID:", editingId);
-      console.log("🔧 Sending data:", productData);
-      const res = await axios.put(`https://lbilling-app-1.onrender.com/api/products/${editingId}`, productData);
-      console.log("✅ Response from backend:", res.data);
-      alert("✅ Product updated!");
-    }
-    
-
+  
+    try {
+      let res;
+      if (isEditing) {
+        // ✅ UPDATE PRODUCT (PUT request)
+        console.log("🔧 Editing product ID:", editingId);
+        console.log("🔧 Sending data:", productData);
+        res = await axios.put(
+          `https://billing-app-1.onrender.com/api/products/${editingId}`,
+          productData
+        );
+        console.log("✅ Response from backend:", res.data);
+        alert("✅ Product updated!");
+      } else {
+        // ✅ ADD NEW PRODUCT (POST request)
+        console.log("🆕 Adding product:", productData);
+        res = await axios.post(
+          "https://billing-app-1.onrender.com/api/products/add",
+          productData
+        );
+        console.log("✅ Response from backend:", res.data);
+        alert("✅ Product added!");
+      }
+  
       setNewProduct({ name: "", description: "", price: "", stock: "", sku: "" });
       setShowForm(false);
       setIsEditing(false);
       setEditingId(null);
-      loadProducts();
-    
+      loadProducts(); // ✅ Refresh products list
+    } catch (err) {
+      console.error("❌ API error:", err);
+      alert("Error adding/updating product. Check console for details.");
+    }
   };
-
+  
   const handleDelete = async (productId) => {
     try {
       await axios.delete(`https://billing-app-1.onrender.com/api/products/${productId}`);
@@ -79,6 +114,9 @@ const ProductManager = () => {
       sku: product.sku,
     });
   };
+
+  
+  
 
   return (
     <div className="product-manager-container">
@@ -153,22 +191,26 @@ const ProductManager = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map(product => (
+    {products.length > 0 ? (
+        products.map(product => (
             <tr key={product._id}>
-              <td>
-                <strong>{product.name}</strong>
-                <div className="desc">{product.description}</div>
-              </td>
-              <td>{product.sku || "-"}</td>
-              <td>₹{parseFloat(product.price).toFixed(2)}</td>
-              <td>{product.stock}</td>
-              <td className="actions">
-                <button className="edit-btn" onClick={() => handleEdit(product)}>✏️</button>
-                <button className="delete-btn" onClick={() => handleDelete(product._id)}>🗑️</button>
-              </td>
+                <td><strong>{product.name}</strong></td>
+                <td>{product.sku || "-"}</td>
+                <td>₹{parseFloat(product.price).toFixed(2)}</td>
+                <td>{product.stock ?? "N/A"}</td>
+                <td className="actions">
+                    <button className="edit-btn" onClick={() => handleEdit(product)}>✏️</button>
+                    <button className="delete-btn" onClick={() => handleDelete(product._id)}>🗑️</button>
+                </td>
             </tr>
-          ))}
-        </tbody>
+        ))
+    ) : (
+        <tr>
+            <td colSpan="5">⚠️ No products found.</td>
+        </tr>
+    )}
+</tbody>
+
       </table>
     </div>
   );
