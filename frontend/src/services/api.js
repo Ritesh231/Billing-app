@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || "http://billing-app-1.onrender.com/api";
+const API_URL = process.env.REACT_APP_API_URL || "https://billing-app-1.onrender.com/api";
 
 
 export const fetchProducts = () => axios.get(`${API_URL}/products`);
@@ -11,7 +11,7 @@ export const fetchBills = () => axios.get(`${API_URL}/bills`);
 
 export const fetchDashboardStats = async () => {
     try {
-        const res = await axios.get("http://billing-app-1.onrender.com/api/dashboard/stats");
+        const res = await axios.get("https://billing-app-1.onrender.com/api/dashboard/stats");
         return res.data;
     } catch (error) {
         console.error('Failed to fetch dashboard stats:', error);

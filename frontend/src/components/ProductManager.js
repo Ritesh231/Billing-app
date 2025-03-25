@@ -42,7 +42,7 @@ const ProductManager = () => {
     if (isEditing) {
       console.log("🔧 Editing product ID:", editingId);
       console.log("🔧 Sending data:", productData);
-      const res = await axios.put(`http://lbilling-app-1.onrender.com/api/products/${editingId}`, productData);
+      const res = await axios.put(`https://lbilling-app-1.onrender.com/api/products/${editingId}`, productData);
       console.log("✅ Response from backend:", res.data);
       alert("✅ Product updated!");
     }
@@ -58,7 +58,7 @@ const ProductManager = () => {
 
   const handleDelete = async (productId) => {
     try {
-      await axios.delete(`http://billing-app-1.onrender.com/api/products/${productId}`);
+      await axios.delete(`https://billing-app-1.onrender.com/api/products/${productId}`);
       alert("🗑️ Product deleted!");
       loadProducts();
     } catch (err) {
