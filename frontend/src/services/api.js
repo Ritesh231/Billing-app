@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = "http://billing-app-1.onrender.com/api";
+const API_URL = process.env.REACT_APP_API_URL || "http://billing-app-1.onrender.com/api";
+
 
 export const fetchProducts = () => axios.get(`${API_URL}/products`);
 export const addProduct = (product) => axios.post(`${API_URL}/products/add`, product);
